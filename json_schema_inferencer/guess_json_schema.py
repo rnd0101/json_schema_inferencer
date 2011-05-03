@@ -22,9 +22,8 @@ At the second phase paths are reconstructed to json schema.
 
 """
 
-import urllib
 import simplejson
-
+import urllib
 
 TYPES = {
     type(1): 'integer',
@@ -140,8 +139,6 @@ def build_element(paths, schema, path, pos=0):
             subschema = items
             build_element(paths, subschema, path, pos+2)
 
-
-
 def build_schema(paths):
     schema = {}
     for path in sorted(paths.keys()):
@@ -149,73 +146,10 @@ def build_schema(paths):
 
     return schema
 
-
-
-def SCH(s):
-    print "d=",repr(s)
-    print "s=",
-    paths = parse_sample(s)
-    pp(build_schema(paths))
-    print "validictory.validate(d,s)"
-
-
-
 def from_json(url):
     u = urllib.urlopen(url).read()
     return simplejson.loads(u)
 
-
-from pprint import pprint as pp
-def test():
-    import sys
-    print "import validictory"
-    SCH("a")
-    SCH(123)
-    SCH([])
-    SCH({})
-
-    SCH([1, 3, 4])
-    SCH(['1, 3, 4'])
-    SCH([[1,2],[2,3],[4,5],[6,7]])
-
-    SCH([[1,2],[2,{}]])
-
-    SCH([[1,2],[2,{}],[4,5],[6,7]])
-
-
-    SCH({'a': 1, 'b': 2})
-    SCH([{'a': 1, 'b': 2}, {'a': 234, 'c': 10}])
-
-    SCH([{'a': 'here'}, {'a': ''}])
-    sys.exit(0)
-
-    S = [[{"a": "b"},{"a": "c"}], 1, "23452345"]
-    SCH(S)
-    S = [{"a": "b"},{"a": "c"},{"a": "c", "d": None}]
-    SCH(S)
-    S = [{"a": "c", "d": None},{"a": "b"},{"a": "c"},]
-    SCH(S)
-    S = [None,]
-    SCH(S)
-    S = {}
-    SCH(S)
-
-    print '#' * 10
-    S = [{"a": 1},{"a": "b"},{"a": None},]
-    SCH(S)
-
-    S = [{"a": {}}, {"a": {"aa": 1, "bb": 2}},{"a": None},]
-    SCH(S)
-
-
-    S = {'places': [
-            {'p': 1, 'h': [{'p': 1, 's': 1}, {'p': 1, 's': 1}]},
-            {'p': 2, 'h': [{'p': 2, 's': 1}, {'p': 2, 's': 1}]},
-            {'p': 3, 'h': [{'p': 2, 's': 1}, {'p': 3, 's': 1}]},
-            ]}
-
-    SCH(S)
-
-
-if __name__ == '__main__':
-    test()
+def guess_schema(s):
+    paths = parse_sample(s)
+    return build_schema(paths)
