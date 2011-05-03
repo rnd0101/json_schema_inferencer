@@ -1,14 +1,51 @@
 
 from guess_json_schema import guess_schema
+from validictory.validator import SchemaError
+from validictory.validator import SchemaValidator
+import copy
 import validictory
+import warnings
+
+# the only reason for this class is to workaround problem
+# in the validictory, which requires string to be non-blank
+class FixedSchemaValidator(SchemaValidator):
+    def _SchemaValidator__validate(self, fieldname, data, schema):
+
+        if schema is not None:
+            if not isinstance(schema, dict):
+                raise SchemaError("Schema structure is invalid.")
+
+            newschema = copy.copy(schema)
+
+            # handle 'optional', replace it with 'required'
+            if 'required' in schema and 'optional' in schema:
+                raise SchemaError('cannot specify optional and required')
+            elif 'optional' in schema:
+                warnings.warn('The "optional" attribute has been replaced by "required"', DeprecationWarning)
+                newschema['required'] = not schema['optional']
+            elif 'required' not in schema:
+                newschema['required'] = self.required_by_default
+
+            if 'blank' not in schema:
+                newschema['blank'] = True
+
+            for schemaprop in newschema:
+
+                validatorname = "validate_" + schemaprop
+
+                validator = getattr(self, validatorname, None)
+                if validator:
+                    validator(data, fieldname, schema,
+                              newschema.get(schemaprop))
+
+        return data
 
 def make_test(d):
     s = guess_schema(d)
-    return validictory.validate(d, s)
+    return validictory.validate(d, s, validator_cls=FixedSchemaValidator)
 
 def test():
     import sys
-    print "import validictory"
     make_test("a")
     make_test(123)
     make_test([])
