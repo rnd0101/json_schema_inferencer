@@ -11,7 +11,7 @@ Automatically generates schema given json samples.""",
       classifiers=[], # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
       keywords='json schema inference deduce sample',
       author='Roman Susi',
-      author_email='roman.susi@hexagonit.fi',
+      author_email='roman.susi@daagon.fi',
       url='',
       license='',
       packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
