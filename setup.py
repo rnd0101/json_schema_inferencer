@@ -48,7 +48,7 @@ setup(name="json_schema_inferencer",
 
       install_requires=['simplejson', 'validictory'],
       entry_points={
-          #  'console_scripts':
-          #      ['json_schema_inferencer=json_schema_inferencer:main']
+          'console_scripts':
+              ['json_schema_inferencer=json_schema_inferencer:main']
       }
-      )
+)
