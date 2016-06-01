@@ -13,3 +13,11 @@ For development (NB. assuming target virtualenv is activated)::
    python setup.py test
 
 Useful usage examples can be found under tests directory.
+
+Usage::
+
+   json_schema_inferencer -u file:///path/to/file.json
+
+of
+
+   json_schema_inferencer -u http://someserver/path/to/file.json
