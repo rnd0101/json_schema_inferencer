@@ -1,10 +1,5 @@
+==================================================================
+json_schema_inferencer: Automatically generates schema given JSON samples
+==================================================================
 
-JSON Schema Inferencer
-======================
-
-Automatically generates schema given json samples.
-
-TODO:
-
-    * library
-    * tests
+TBD

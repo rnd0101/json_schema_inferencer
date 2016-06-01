@@ -35,10 +35,11 @@ TYPES = {
     type(()): 'array',
     type({}): 'object',
     type(None): 'null',
-    }
+}
 
-COMPOUND_TYPES = set(['array', 'object'])
+COMPOUND_TYPES = frozenset(['array', 'object'])
 SCALARS_TYPES = set(TYPES.values()) - COMPOUND_TYPES
+
 
 def parse_sample(item, paths=None, base=None):
     base = base or ()
@@ -52,7 +53,7 @@ def parse_sample(item, paths=None, base=None):
         paths[base1] += 1
     elif type_ == "array":
         paths[base1] += 1
-        base1b = base1 + (None,)   # adding extra place for possible extensions (eg array index)
+        base1b = base1 + (None,)  # adding extra place for possible extensions (eg array index)
         paths.setdefault(base1b, 0)
         for subitem in item:
             parse_sample(subitem, paths=paths, base=base1b)
@@ -87,8 +88,8 @@ def build_element(paths, schema, path, pos=0):
                     schema["type"] = [schema["type"], typename]
         else:
             schema["type"] = typename
-        # scalar type is always a leaf. No need to call.
-        #build_element(paths, schema, path, pos+1)
+            # scalar type is always a leaf. No need to call.
+            # build_element(paths, schema, path, pos+1)
     elif typename == "object":
         if "type" in schema:
             if schema["type"] != typename:
@@ -107,15 +108,16 @@ def build_element(paths, schema, path, pos=0):
             schema["type"] = typename
             props = schema["properties"] = {}
         # deal with properties
-        if pos+1 < len(path):
-            propname = path[pos+1]
+        if pos + 1 < len(path):
+            propname = path[pos + 1]
             if propname in props:
                 subschema = props[propname]
             else:
                 subschema = props[propname] = {
-                    "required": paths[path[:pos+1]] == paths[path[:pos+2]],  # property less frequent than base object
-                    }
-            build_element(paths, subschema, path, pos+2)
+                    "required": paths[path[:pos + 1]] == paths[path[:pos + 2]],
+                    # property less frequent than base object
+                }
+            build_element(paths, subschema, path, pos + 2)
     elif typename == "array":
         if "type" in schema:
             if schema["type"] != typename:
@@ -132,12 +134,13 @@ def build_element(paths, schema, path, pos=0):
                 items = schema["items"]
         else:
             schema["type"] = typename
-            items = schema["items"] = {}   #schema
+            items = schema["items"] = {}  # schema
         # deal with items
-        if pos+1 < len(path):
-            assert path[pos+1] is None  # for now
+        if pos + 1 < len(path):
+            assert path[pos + 1] is None  # for now
             subschema = items
-            build_element(paths, subschema, path, pos+2)
+            build_element(paths, subschema, path, pos + 2)
+
 
 def build_schema(paths):
     schema = {}
@@ -146,9 +149,11 @@ def build_schema(paths):
 
     return schema
 
+
 def from_json(url):
     u = urllib.urlopen(url).read()
     return simplejson.loads(u)
+
 
 def guess_schema(s):
     paths = parse_sample(s)
