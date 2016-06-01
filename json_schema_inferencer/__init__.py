@@ -2,8 +2,8 @@
 import argparse
 import json
 
-from json_schema_inferencer.guess_json_schema import from_json
-from json_schema_inferencer.guess_json_schema import guess_schema
+from .guess_json_schema import from_json
+from .guess_json_schema import guess_schema
 
 
 def parseargs():
