@@ -22,7 +22,7 @@ At the second phase paths are reconstructed to json schema.
 
 """
 
-import simplejson
+import json
 import urllib
 
 TYPES = {
@@ -152,7 +152,7 @@ def build_schema(paths):
 
 def from_json(url):
     u = urllib.urlopen(url).read()
-    return simplejson.loads(u)
+    return json.loads(u)
 
 
 def guess_schema(s):

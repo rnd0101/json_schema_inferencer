@@ -25,7 +25,7 @@ class PyTest(TestCommand):
         sys.exit(pytest.main(self.test_args))
 
 
-version = "0.2b0"
+version = "0.2b1"
 
 setup(name="json_schema_inferencer",
       version=version,
@@ -46,7 +46,7 @@ setup(name="json_schema_inferencer",
       tests_require=['pytest'],
       cmdclass={'test': PyTest},
 
-      install_requires=['simplejson', 'validictory'],
+      install_requires=['validictory'],
       entry_points={
           'console_scripts':
               ['json_schema_inferencer=json_schema_inferencer:main']
